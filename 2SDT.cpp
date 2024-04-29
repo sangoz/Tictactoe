@@ -157,7 +157,7 @@
 
         void start(){
             char currentPlayer = 'X';
-            while(true){
+            while(!board.isWin(currentPlayer) || !board.isDraw()){
                 board.printBoard();
                 int move = players[currentPlayer == 'X' ? 0 : 1]->getMove();
                 if(!board.isValidMove(move)){
@@ -178,44 +178,38 @@
                 currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
             }
         }
-    };
-
-    int main(){
-        string mode;
-        cout << "Enter mode(pvp/pvm/mvp/mvm): ";
-        while(cin >> mode){
-            if(mode == "pvp"){
-                HumanPlayer player1;
-                HumanPlayer player2;
-                Game game(&player1, &player2);
-                game.start();
-                cout << "Enter mode(pvp/pvm/mvp/mvm): ";
+        static int main() {
+            HumanPlayer human;
+            ComputerPlayer computer;
+            string CHOOSE_MODE = "Enter mode(pvp/pvm/mvp/mvm) or 'exit' to quit: ";
+            string mode;
+            cout << CHOOSE_MODE;
+            while(cin >> mode && mode != "exit"){
+                if(mode == "pvp"){
+                    Game game(&human, &human);
+                    game.start();
+                }
+                else if(mode == "pvm"){
+                    Game game(&human, &computer);
+                    game.start();
+                }
+                else if(mode == "mvp"){
+                    Game game(&computer, &human);
+                    game.start();
+                }
+                else if(mode == "mvm"){
+                    Game game(&computer, &computer);
+                    game.start();
+                }
+                else{
+                    cout << "Invalid mode. " << endl;
+                }
+                cout << CHOOSE_MODE;
             }
-            else if(mode == "pvm"){
-                HumanPlayer player1;
-                ComputerPlayer player2;
-                Game game(&player1, &player2);
-                game.start();
-                cout << "Enter mode(pvp/pvm/mvp/mvm): ";
-            }
-            else if(mode == "mvp"){
-                ComputerPlayer player1;
-                HumanPlayer player2;
-                Game game(&player1, &player2);
-                game.start();
-                cout << "Enter mode(pvp/pvm/mvp/mvm): ";
-            }
-            else if(mode == "mvm"){
-                ComputerPlayer player1;
-                ComputerPlayer player2;
-                Game game(&player1, &player2);
-                game.start();
-                cout << "Enter mode(pvp/pvm/mvp/mvm): ";
-            }
-            else{
-                cout << "OK, bye!" << endl;
-                break;
-            }
+            return 0;
         }
-        return 0;
-    }
+    };
+int main(){
+    return Game::main();
+}
+
